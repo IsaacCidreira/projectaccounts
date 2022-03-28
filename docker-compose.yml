@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  database:
+    image: 'postgres'
+    container_name: database_trainner
+    restart: always
+    ports:
+      - 5432:5432
+    environment: 
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=trainner
+      - POSTGRES_DB=trainning
+    volumes:
+      - pgdata:/data/postgres
+
+  app:
+    build: .
+    container_name: trainner
+    restart: always
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/user/app
+    links:
+      - database
+    depends_on:
+      - database
+
+volumes:
+  pgdata:
+    driver: local
